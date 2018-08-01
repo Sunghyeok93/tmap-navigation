@@ -1,17 +1,17 @@
 const { URL } = require('url');
 const request = require('./request');
 require('dotenv').config();
-
 const { TMAP_API_KEY } = process.env;
-
 const POI_URL = 'https://api2.sktelecom.com/tmap/pois';
+
+var search_keyword = process.argv[2];
 
 const searchPOIUrl = new URL(POI_URL);
 
 searchPOIUrl.searchParams.set('version', 1);
-searchPOIUrl.searchParams.set('searchKeyword', '서울역');
+searchPOIUrl.searchParams.set('searchKeyword', search_keyword);
 searchPOIUrl.searchParams.set('page', 1);
-searchPOIUrl.searchParams.set('count', 20);
+searchPOIUrl.searchParams.set('count', 1);
 searchPOIUrl.searchParams.set('searchType', 'all');
 // searchPOIUrl.searchParams.set('areaLLCode', '뭐야이건 찾아봐야지');
 // searchPOIUrl.searchParams.set('areaLMCode', '이것도');
@@ -36,4 +36,8 @@ const options = {
   headers
 };
 
-request(options).then(console.log);
+request(options).then(result => {
+    var jsonObj_1 = JSON.parse(result);
+    console.log(jsonObj_1['searchPoiInfo']['pois']['poi']);
+});
+
